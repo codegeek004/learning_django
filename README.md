@@ -1,1 +1,1 @@
-# learning_django
+hello django-admin startproject cfehome .
