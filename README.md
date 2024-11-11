@@ -1,1 +1,2 @@
-hello django-admin startproject cfehome .
+django-admin startproject cfehome 
+python manage.py startapp visits
