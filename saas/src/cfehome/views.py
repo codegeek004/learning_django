@@ -10,7 +10,7 @@ def home_page_view(request, *args, **kwargs):
 		"page_title": my_title
 	}
 	html_template = "home.html"
-	return render(request, html_template)
+	return render(request, html_template, my_context)
 
 def my_old_home_page(request, *args, **kwargs):
 	my_title = "My page"
