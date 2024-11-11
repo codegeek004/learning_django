@@ -54,7 +54,8 @@ ROOT_URLCONF = 'cfehome.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        #django can look into these locations and render the response based on these
+        'DIRS': [BASE_DIR / "templates", BASE_DIR / "cfehome"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
