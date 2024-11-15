@@ -37,7 +37,7 @@ def my_old_home_page(request, *args, **kwargs):
 	my_context = {
 		"page_title" : my_title
 	}
-	html = """
+	html_ = """
 		<!DOCTYPE html>
 		<html>
 		<body>
@@ -47,5 +47,5 @@ def my_old_home_page(request, *args, **kwargs):
 		""".format(**my_context) #page_title=my_title
 		# html_file_path = this_dir / "home.html"
 		# html_ = html_file_path.read_text()
-	return HttpResponse()
+	return HttpResponse(html_)
 
