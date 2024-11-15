@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello-world/', home_page_view),
     path('about/', about_view),
-    path('hello-world.html', home_page_view), this is also valid
+    path('hello-world.html', home_page_view), #this is also valid
     path('', home_page_view)
 ]
