@@ -52,4 +52,6 @@ RUN printf "#!/bin/bash\n" > ./paracord_runner.sh && \
 RUN chmod +x paracord_runner.sh
 
 # Set CMD to run the script
-CMD ./paracord_runner.sh
+#CMD ./paracord_runner.sh
+CMD ["./paracord_runner.sh"]
+
