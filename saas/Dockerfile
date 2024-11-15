@@ -4,10 +4,10 @@ ARG PYTHON_VERSION=3.12-slim-bullseye
 FROM python:${PYTHON_VERSION}
 
 # Create a virtual environment
-RUN python -m venv /opt/venv
+RUN python -m saas /opt/saas
 
 # Set the virtual environment as the current location
-ENV PATH=/opt/venv/bin:$PATH
+ENV PATH=/opt/saas/bin:$PATH
 
 # Upgrade pip
 RUN pip install --upgrade pip
