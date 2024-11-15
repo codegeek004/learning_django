@@ -31,6 +31,7 @@ def about_view(request, *args, **kwargs):
 
 
 
+
 def my_old_home_page(request, *args, **kwargs):
 	my_title = "My page"
 	my_context = {
