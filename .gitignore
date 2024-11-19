@@ -1,3 +1,6 @@
 .DS_Store/
 saas/
 src/.DS_Store/
+src/staticfiles/vendors
+local-cdn/
+node_modules/
