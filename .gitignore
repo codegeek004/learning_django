@@ -4,3 +4,4 @@ src/.DS_Store/
 src/staticfiles/vendors
 local-cdn/
 node_modules/
+src/helpers/__pycache__/
