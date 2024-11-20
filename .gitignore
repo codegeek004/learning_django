@@ -1,7 +1,9 @@
-.DS_Store/
+DS_Store/
 saas/
 src/.DS_Store/
 src/staticfiles/vendors
 local-cdn/
 node_modules/
 src/helpers/__pycache__/
+__pycache__
+src/commando/management/commands/__pycache__/
