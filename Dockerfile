@@ -41,6 +41,15 @@ COPY ./src /code
 # Install the Python project requirements
 RUN pip install -r /tmp/requirements.txt
 
+RUN python manage.py vendor_pull
+RUN python manage.py collectstatic --noinput
+#whitenoise -> s3
+
+##Secret key
+ARG DJANGO_SECRET_KEY
+ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+
+
 # database isn't available during build
 # run any other commands that do not need the database
 # such as:
