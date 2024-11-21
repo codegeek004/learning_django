@@ -7,3 +7,5 @@ node_modules/
 src/helpers/__pycache__/
 __pycache__
 src/commando/management/commands/__pycache__/
+.env
+src/.env
