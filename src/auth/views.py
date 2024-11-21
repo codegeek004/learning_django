@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
+
 
 def login_view(request):
 	print(request.method, request.POST or None)
@@ -14,5 +15,19 @@ def login_view(request):
 				return redirect('/')
 	return render(request, 'auth/login.html',{})
 
+
+
+
+#########Not a good way to register. We will use allauth#############
+#this way also we can create register
+User = get_user_model()
+
 def register_view(request):
-	return render(request, 'auth/register.html',{})
+	if request.method == "POST":
+		username = request.POST.get('username')
+		email = request.POST.get('email')
+		try:
+			User.objects.create_user(username, email=None, password=None)
+		except:
+			pass
+	return render(request, 'auth/register.html')
