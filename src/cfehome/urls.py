@@ -27,6 +27,6 @@ urlpatterns = [
     # path('register/', auth_views.register_view),
     path('about/', about_view),
     path('hello-world.html', home_page_view), #this is also valid
-    path('', home_page_view),
+    path('', home_page_view, name="home"),
     path('accounts/', include('allauth.urls')),
 ]
