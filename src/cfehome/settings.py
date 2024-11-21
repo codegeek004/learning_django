@@ -197,8 +197,10 @@ print(STATICFILES_VENDOR_DIR, 'vendor dir')
 
 # source for python manage.py collectstatic
 STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
-    BASE_DIR / "staticfiles/vendors",  # Optional: Explicitly include this
+    # BASE_DIR / "staticfiles",
+    # BASE_DIR / "staticfiles/vendors",  # Optional: Explicitly include this
+    STATICFILES_BASE_DIR,
+    STATICFILES_VENDOR_DIR,
 ]
 
 #output for python manage.py collectstatic
