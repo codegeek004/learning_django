@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    "allauth.socialaccount.providers.github",
+     'allauth.socialaccount.providers.github',
     "widget_tweaks",
     "slippers",
     #my apps
@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #allauth
-    "allauth.account.middleware.AccountMiddleware",
+    "allauth.account.middleware.AccountMiddleware", 
 ]
 
 ROOT_URLCONF = 'cfehome.urls'
@@ -164,7 +164,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Provider specific settings for allauth
-SOCIALACCOUNT_PROVIDERS = {}
+SOCIALACCOUNT_PROVIDERS = {
+    "github" : {
+        "VERIFIED_EMAIL" : True,
+    }
+}
 
 
 STORAGES = {
