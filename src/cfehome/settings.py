@@ -211,16 +211,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 import logging
+from django.core.mail import send_mail
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(message)s",
-)
+logger = logging.getLogger(__name__)
 
-
-from allauth.account.signals import email_confirmation_sent
-from django.dispatch import receiver
-
-@receiver(email_confirmation_sent)
-def debug_email_confirmation_sent(sender, **kwargs):
-    print("Email confirmation sent:", kwargs)
+try:
+    send_mail(
+        'Subject',
+        'Message',
+        'your_email@example.com',
+        ['recipient@example.com'],
+        fail_silently=False,
+    )
+except Exception as e:
+    logger.error(f"Error sending email: {e}")
