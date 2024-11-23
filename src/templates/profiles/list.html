@@ -9,7 +9,7 @@
 
 
     {% if perms.auth %}
-
+    {% if perms.auth.view_user %}
     <div>
             {% for instance in object_list %}
 
