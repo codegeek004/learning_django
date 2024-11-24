@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import Group, Permission
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL #auth.user
 
 SUBSCRIPTION_PERMISSIONS = [
 			('advanced', 'Advanced Perm'), #subscriptions advanced
@@ -24,3 +27,11 @@ class Subscription(models.Model):
 		permissions = SUBSCRIPTION_PERMISSIONS
 	def __str__(self):
 		return self.name
+
+class UserSubscription(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True, blank=True)
+	active = models.BooleanField(default=True)
+
+	def __str__(self):
+		return f"{self.user}"
