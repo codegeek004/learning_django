@@ -43,17 +43,23 @@ def user_sub_post_save(sender, instance, *args, **kwargs):
 	user_sub_instance = instance
 	user = user_sub_instance.user
 	subscription_obj = user_sub_instance.subscription
+	groups_ids = []
+	if subscription_obj is not None:
+		groups = subscription_obj.groups.all()
+		groups_ids = groups.values_list('id', flat=True)
 	groups = subscription_obj.groups.all()
-	# user.groups.set(groups)
+	# user.groups.set(groups)	
 	# this will be useful when you want to add a group which is not a part of the subscription model but still
 	# you want to add without losing the integrity then you can use the ALLOW_CUSTOM_GROUPS approach
-	if ALLOW_CUSTOM_GROUPS:
-		user.groups.set(groups)
+	if not ALLOW_CUSTOM_GROUPS:
+		user.groups.set(groups_ids)
 	else:
-		subs_qs = Subscription.objects.filter(active=True).exclude(id=subscription_obj.id)
+		subs_qs = Subscription.objects.filter(active=True)
+		if subscription_obj is not None:
+			subs_qs = subs_qs.exclude(id=subscription_obj.id)
 		subs_groups = subs_qs.values_list('groups__id', flat=True)
 		subs_groups_set = set(subs_groups)
-		groups_ids = groups.values.list('id', flat=True)
+		# groups_ids = groups.values.list('id', flat=True)
 		current_groups = user.groups.all().values_list('id', flat=True)
 		groups_ids_set = set(groups_ids)
 		current_groups_set = set(current_groups) - subs_groups_set
