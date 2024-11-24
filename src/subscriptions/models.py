@@ -44,6 +44,8 @@ def user_sub_post_save(sender, instance, *args, **kwargs):
 	user = user_sub_instance.user
 	subscription_obj = user_sub_instance.subscription
 	groups = subscription_obj.groups.all()
+	# this will be useful when you want to add a group which is not a part of the subscription model but still
+	# you want to add without losing the integrity then you can use the ALLOW_CUSTOM_GROUPS approach
 	if ALLOW_CUSTOM_GROUPS:
 		user.groups.set(groups)
 	else:
@@ -56,6 +58,18 @@ def user_sub_post_save(sender, instance, *args, **kwargs):
 		current_groups_set = set(current_groups) - subs_groups_set
 		final_groups_ids = list(groups_ids_set | current_groups_set)
 		user.groups.set(final_groups_ids)
+# Exclude Groups of Other Subscriptions:
+# The function fetches all groups from active subscriptions except the current one.
+# These are stored in subs_groups_set.
+# Calculate Current Groups:
+# The user's current groups are fetched and converted into a set, current_groups_set.
+# Remove Overlapping Groups:
+# Any groups linked to other active subscriptions (subs_groups_set) are removed from current_groups_set.
+# Combine Groups:
+# Groups linked to the current subscription (groups_ids_set) are combined with the remaining groups in current_groups_set.
+# Update User Groups:
+# The user’s groups are updated with the resulting list, final_groups_ids.
+
 
 
 post_save.connect(user_sub_post_save, sender=UserSubscription)
