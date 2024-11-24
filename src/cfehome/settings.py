@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     #my apps
     'visits',
     'commando',
-    'profiles'
+    'profiles',
+    'subscriptions'
 ]
 
 MIDDLEWARE = [
@@ -188,7 +189,7 @@ STATIC_URL = '/static/'
 STATICFILES_BASE_DIR = BASE_DIR / "staticfiles"
 STATICFILES_BASE_DIR.mkdir(exist_ok=True, parents=True)
 STATICFILES_VENDOR_DIR = STATICFILES_BASE_DIR / "vendors"
-print(STATICFILES_VENDOR_DIR, 'vendor dir')
+
 
 # source for python manage.py collectstatic
 STATICFILES_DIRS = [
