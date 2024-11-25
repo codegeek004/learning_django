@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "slippers",
     #my apps
+    'customers',
     'visits',
     'commando',
     'profiles',
