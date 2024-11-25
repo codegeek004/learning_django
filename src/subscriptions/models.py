@@ -42,6 +42,7 @@ class Subscription(models.Model):
 				metadata={"subscription_plan_id":self.id},
 				raw=False)
 			self.stripe_id = stripe_id
+			print(self.stripe_id)
 		# print(stripe_response)
 		super().save(*args, **kwargs)
 		# # post=save will not update
@@ -150,6 +151,7 @@ class SubscriptionPrice(models.Model):
 			  }, raw=False
 			)
 			self.stripe_id=stripe_id
+
 
 
 

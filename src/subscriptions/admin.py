@@ -3,9 +3,11 @@ from .models import Subscription, UserSubscription, SubscriptionPrice
 
 class SubscriptionPrice(admin.TabularInline):
 	model = SubscriptionPrice
-	extra = 1
+	extra = 0
+
 
 class SubscriptionAdmin(admin.ModelAdmin):
+	inlines = [SubscriptionPrice]
 	list_display = ['name', 'active', 'stripe_id']
 
 admin.site.register(Subscription, SubscriptionAdmin)
