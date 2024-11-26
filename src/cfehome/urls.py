@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from subscriptions import views as subscription_views
 from .views import (
     home_page_view, 
     about_view, 
@@ -32,6 +33,7 @@ urlpatterns = [
     path('login/', auth_views.login_view),
     # path('register/', auth_views.register_view),
     path('about/', about_view),
+    path('pricing/', subscription_views.subscription_price_view, name="pricing"),
     path('hello-world.html', home_page_view), #this is also valid
     path('', home_page_view, name="home"),
     path('accounts/', include('allauth.urls')),
