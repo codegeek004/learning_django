@@ -32,10 +32,24 @@ class Subscription(models.Model):
 		}
 	)
 	stripe_id = models.CharField(max_length=120, null=True, blank=True)
+	order = models.IntegerField(default=-1, help_text='Ordering on django pricing page')
+	featured = models.BooleanField(default=True, help_text='Featured on Django Pricing Page')
+	updated = models.DateTimeField(auto_now=True)
+	timestamp = models.DateTimeField(auto_now_add=True)	
+	features = models.TextField(help_text="Features for pricing, separated by new lines", blank=True, null=True)
+	
 	class Meta:
+		ordering = ['order', 'featured', '-updated']
 		permissions = SUBSCRIPTION_PERMISSIONS
+
+	@property
+	def get_features_as_list(self):
+		return [x.strip() for x in self.featured.split('\n')]
+	
+
 	def __str__(self):
 		return self.name
+
 
 	def save(self, *args, **kwargs):
 		
@@ -46,11 +60,14 @@ class Subscription(models.Model):
 			self.stripe_id = stripe_id
 			print(self.stripe_id)
 		super().save(*args, **kwargs)
+
+
 		# print(stripe_response)
 		
 		# # post=save will not update
 		# self.stripe_id = 'something else'
 		#self.save()#recursively called too many times so it will cause an error
+
 
 
 class UserSubscription(models.Model):
@@ -100,7 +117,7 @@ def user_sub_post_save(sender, instance, *args, **kwargs):
 # Update User Groups:
 # The user’s groups are updated with the resulting list, final_groups_ids.
 
-
+	
 
 post_save.connect(user_sub_post_save, sender=UserSubscription)
 
@@ -128,6 +145,25 @@ class SubscriptionPrice(models.Model):
 
 	class Meta:
 		ordering = ['order','featured','-updated']
+		permissions = SUBSCRIPTION_PERMISSIONS
+
+	@property
+	def display_sub_name(self):
+		if not self.subscription:
+			return "Plan"
+		return self.subscription.name
+
+	@property
+	def display_features_list(self):
+		if not self.subscription:
+			return []
+		return self.subscription.get_features_as_list()
+
+	@property
+	def get_checkout_url(self):
+		return reverse("sub-price-checkout", 
+            kwargs = {"price_id": self.id}  
+            )
 
 
 	@property
@@ -158,6 +194,7 @@ class SubscriptionPrice(models.Model):
 			  	"subscription_plan_price_id" : self.id
 			  }, raw=False
 			)
+
 			self.stripe_id=stripe_id
 			super().save(*args, **kwargs)
 			if self.featured and self.subscription:
@@ -166,6 +203,10 @@ class SubscriptionPrice(models.Model):
 					interval=self.interval
 					).exclude(id=self.id)
 				qs.update(featured=False)
+
+
+			
+
 
 
 
