@@ -42,7 +42,6 @@ def create_price(
         unit_amount="9999",
         interval="month",
         product=None,
-        recurring={"interval":"month"},
         metadata={}, 
         raw=False):
     if product is None:
