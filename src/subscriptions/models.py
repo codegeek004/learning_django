@@ -120,7 +120,10 @@ class SubscriptionPrice(models.Model):
 								choices=IntervalChoices.choices
 								)
 	price = models.DecimalField(max_digits=10, decimal_places=2, default=99.99)
-
+	order = models.IntegerField(default=-1, help_text='Ordering on django pricing page')
+	featured = models.BooleanField(default=True, help_text='Featured on Django Pricing Page')
+	updated = models.DateTimeField(auto_now=True)
+	timestamp = models.DateTimeField(auto_now_add=True)
 	@property
 	def stripe_currency(self):
 		return "inr"
@@ -153,6 +156,12 @@ class SubscriptionPrice(models.Model):
 			)
 			self.stripe_id=stripe_id
 			super().save(*args, **kwargs)
+			if featured:
+				qs = SubscriptionPrice.objects.filter(
+					subscription=self.subscription,
+					interval=self.interval
+					).exclude(id=self.id)
+				qs.update(featured=False)
 
 
 
