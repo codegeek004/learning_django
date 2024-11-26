@@ -38,15 +38,16 @@ class Subscription(models.Model):
 		return self.name
 
 	def save(self, *args, **kwargs):
-
+		
 		if not self.stripe_id:
-			stripe_id = helpers.billing.create_price(name=self.name,
+			stripe_id = helpers.billing.create_product(name=self.name,
 				metadata={"subscription_plan_id":self.id},
 				raw=False)
 			self.stripe_id = stripe_id
 			print(self.stripe_id)
-		# print(stripe_response)
 		super().save(*args, **kwargs)
+		# print(stripe_response)
+		
 		# # post=save will not update
 		# self.stripe_id = 'something else'
 		#self.save()#recursively called too many times so it will cause an error
@@ -124,6 +125,11 @@ class SubscriptionPrice(models.Model):
 	featured = models.BooleanField(default=True, help_text='Featured on Django Pricing Page')
 	updated = models.DateTimeField(auto_now=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['order','featured','-updated']
+
+
 	@property
 	def stripe_currency(self):
 		return "inr"
@@ -143,8 +149,6 @@ class SubscriptionPrice(models.Model):
 
 	def save(self, *args, **kwargs):
 		if (not self.stripe_id and self.product_stripe_id is not None):
-			import stripe
-			stripe.api_key = config('STRIPE_SECRET_KEY')
 			stripe_id = helpers.billing.create_price(
 			  interval=self.interval,
 			  currency=self.stripe_currency,
@@ -156,7 +160,7 @@ class SubscriptionPrice(models.Model):
 			)
 			self.stripe_id=stripe_id
 			super().save(*args, **kwargs)
-			if featured:
+			if self.featured and self.subscription:
 				qs = SubscriptionPrice.objects.filter(
 					subscription=self.subscription,
 					interval=self.interval
