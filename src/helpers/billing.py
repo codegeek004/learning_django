@@ -35,26 +35,27 @@ def create_product(name="",
 
 
 
-  def create_price(
+def create_price(
         currency="inr",
         unit_amount="9999",
         interval="month",
-        product_data=None,
+        product=None,
+        recurring={"interval":"month"},
         metadata={}, 
         raw=False):
-    if response is None:
+    if product is None:
       return None
     response = stripe.Price.create(
         currency=currency,
         unit_amount=unit_amount,
-        recurring={"interval":interval},
-        product_data=product,
+        # recurring={"interval":self.interval},
+        product=product,
         metadata=metadata
       )
-  if raw:
-    return response
-  stripe_id = response.id
-  return response.id
+    if raw:
+      return response
+    stripe_id = response.id
+    return response.id
 
 
 

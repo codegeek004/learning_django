@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from django.conf import settings
 from django.db.models.signals import post_save
 import helpers.billing
+from decouple import config
 
 
 User = settings.AUTH_USER_MODEL #auth.user
@@ -37,6 +38,7 @@ class Subscription(models.Model):
 		return self.name
 
 	def save(self, *args, **kwargs):
+
 		if not self.stripe_id:
 			stripe_id = helpers.billing.create_customer(name=self.name,
 				metadata={"subscription_plan_id":self.id},
@@ -137,20 +139,20 @@ class SubscriptionPrice(models.Model):
 		return self.subscription.stripe_id
 
 	def save(self, *args, **kwargs):
-		super().save(*args, **kwargs)
 		if (not self.stripe_id and self.product_stripe_id is not None):
-			stripe.api_key = "sk_test_51QOm82K5HiUAhiJ8GCXDAsBpz92bBiwFcShpKzQ2YXRPA2Ka7Vw6uMToQ3maRStYtez73k7IWWSOPDVVorBlcji2006yrGuSxI"
+			import stripe
+			stripe.api_key = config('STRIPE_SECRET_KEY')
 			stripe_id = helpers.billing.create_price(
 			  interval=self.interval,
 			  currency=self.stripe_currency,
 			  unit_amount=self.stripe_price,
-			  recurring={"interval": self.interval},
-			  product_data=self.product_stripe_id,
+			  product=self.product_stripe_id,
 			  metadata={
 			  	"subscription_plan_price_id" : self.id
 			  }, raw=False
 			)
 			self.stripe_id=stripe_id
+			super().save(*args, **kwargs)
 
 
 
