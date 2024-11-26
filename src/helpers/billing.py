@@ -24,7 +24,7 @@ def create_customer(name="",
 def create_product(name="",
                     metadata={},
                     raw=False):
-  response = stripe.Customer.create(
+  response = stripe.Product.create(
       name=name,
       metadata=metadata
 )

@@ -40,7 +40,7 @@ class Subscription(models.Model):
 	def save(self, *args, **kwargs):
 
 		if not self.stripe_id:
-			stripe_id = helpers.billing.create_customer(name=self.name,
+			stripe_id = helpers.billing.create_product(name=self.name,
 				metadata={"subscription_plan_id":self.id},
 				raw=False)
 			self.stripe_id = stripe_id
