@@ -37,24 +37,45 @@ def create_product(name="",
 
 
 
+# def create_price(
+#         currency="inr",
+#         unit_amount="9999",
+#         interval="month",
+#         product=None,
+#         metadata={}, 
+#         raw=False):
+#     if product is None:
+#       return None
+#     response = stripe.Price.create(
+#         currency=currency,
+#         unit_amount=unit_amount,
+#         recurring={"interval":self.interval},
+#         product=product,
+#         metadata=metadata
+#       )
+#     if raw:
+#       return response
+#     stripe_id = response.id
+#     return stripe_id
+
 def create_price(
         currency="inr",
-        unit_amount="9999",
-        interval="month",
+        unit_amount=900,
+        interval="month",  
         product=None,
         metadata={}, 
         raw=False):
     if product is None:
-      return None
+        return None
     response = stripe.Price.create(
         currency=currency,
         unit_amount=unit_amount,
-        # recurring={"interval":self.interval},
+        recurring={"interval": interval},  
         product=product,
         metadata=metadata
-      )
+    )
     if raw:
-      return response
+        return response
     stripe_id = response.id
     return stripe_id
 
@@ -71,10 +92,34 @@ def start_checkout_session(customer_id,
         success_url=success_url,
         cancel_url=cancel_url,
         line_items=[{"price": price_stripe_id, "quantity": 2}],
-        mode="payment",
+        mode="subscription",
     )
     if raw:
         return response
     return response.url
+
+def get_checkout_session(stripe_id, raw=True):
+  response = stripe.checkout.Session.retrieve(stripe_id)
+  if raw:
+    return response
+  return response.url
+
+def get_subscription(stripe_id, raw=True):
+  response = stripe.Subscription.retrieve(stripe_id)
+  if raw:
+    return response
+  return response.url
+
+
+
+
+
+
+
+
+
+
+
+
 
 

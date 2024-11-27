@@ -31,8 +31,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('checkout/sub-price/<int:price_id>/', checkout_views.product_price_redirect_view, name='sub_price_checkout'),
-    path('checkout/start/', checkout_views.checkout_redirect_view, name='stripe-checkout-start'),
-    path('checkout/success/', checkout_views.checkout_finalize_view, name='stripe-checkout-end'),
+    path('checkout/receipt/', checkout_views.checkout_view, name='checkout_view'),
     path('hello-world/', home_page_view),
     path('login/', auth_views.login_view),
     # path('register/', auth_views.register_view),
