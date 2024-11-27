@@ -6,6 +6,7 @@ import helpers.billing
 from decouple import config
 
 
+
 User = settings.AUTH_USER_MODEL #auth.user
 
 SUBSCRIPTION_PERMISSIONS = [
@@ -42,9 +43,12 @@ class Subscription(models.Model):
 		ordering = ['order', 'featured', '-updated']
 		permissions = SUBSCRIPTION_PERMISSIONS
 
-	@property
+
 	def get_features_as_list(self):
-		return [x.strip() for x in self.featured.split('\n')]
+		if not self.features:
+			return []
+		print('features', self.features)
+		return [x.strip() for x in self.features.split('\n')]
 	
 
 	def __str__(self):
@@ -158,12 +162,6 @@ class SubscriptionPrice(models.Model):
 		if not self.subscription:
 			return []
 		return self.subscription.get_features_as_list()
-
-	@property
-	def get_checkout_url(self):
-		return reverse("sub-price-checkout", 
-            kwargs = {"price_id": self.id}  
-            )
 
 
 	@property
