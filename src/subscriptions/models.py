@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 import helpers.billing
 from decouple import config
+from django.urls import reverse
 
 
 
@@ -24,6 +25,7 @@ class Subscription(models.Model):
 	name = models.CharField(max_length=120)
 	active = models.BooleanField(default=True)
 	groups = models.ManyToManyField(Group)
+	subtitle = models.CharField(blank=True, null=True)
 	permissions = models.ManyToManyField(
 		Permission,
 		limit_choices_to = {
@@ -133,7 +135,7 @@ class SubscriptionPrice(models.Model):
 	"""
 	class IntervalChoices(models.TextChoices):
 		MONTHLY = 'month', 'Monthly'
-		YEARYLY = 'year', 'Yearly'
+		YEARLY = 'year', 'Yearly'
 
 	subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True)
 	stripe_id = models.CharField(max_length=120, null=True, blank=True)
@@ -155,7 +157,16 @@ class SubscriptionPrice(models.Model):
 	def display_sub_name(self):
 		if not self.subscription:
 			return "Plan"
-		return self.subscription.name
+		return f"{self.subscription.name} Plan"
+
+	@property
+	def display_sub_subtitle(self):
+		if not self.subscription:
+			return "Plan"
+		return self.subscription.subtitle
+
+	def get_checkout_url(self):
+		return reverse('sub_price_checkout', kwargs={'price_id':self.id})
 
 	@property
 	def display_features_list(self):
